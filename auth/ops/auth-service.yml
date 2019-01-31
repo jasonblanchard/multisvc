@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth
+  labels:
+    app: multisvc
+    tier: frontend
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+  selector:
+    app: multisvc
+    tier: frontend
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth
+  labels:
+    app: multisvc
+spec:
+  selector:
+    matchLabels:
+      app: multisvc
+      tier: frontend
+  replicas: 1 # Important until implement RedisStore for sessions
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 25%
+  template:
+    metadata:
+      labels:
+        app: multisvc
+        tier: frontend
+    spec:
+      containers:
+      - name: auth
+        image: jasonblanchard/multisvc-auth:1
+        env:
+          - name: 'PORT'
+            value: '8080'
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          httpGet:
+             path: /health
+             port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          successThreshold: 1
