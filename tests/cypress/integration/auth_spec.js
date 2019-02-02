@@ -1,5 +1,7 @@
+const baseUrl = 'http://192.168.99.105:31312/auth';
+
 it('Checks health', function() {
-  cy.request('http://localhost:8082/health')
+  cy.request(`${baseUrl}/health`)
     .then(response => {
       expect(response.status).to.equal(200);
     });
@@ -7,7 +9,7 @@ it('Checks health', function() {
 
 describe('get session', () => {
   it('Gets a 401 when not authorized', function() {
-    cy.request({ url: 'http://localhost:8082/session', failOnStatusCode: false })
+    cy.request({ url: `${baseUrl}/session`, failOnStatusCode: false })
       .then(response => {
         expect(response.status).to.equal(401);
       });
@@ -18,7 +20,7 @@ describe('create session', () => {
   it('creates a session', function() {
     cy.request({
       method: 'POST',
-      url: 'http://localhost:8082/session',
+      url: `${baseUrl}/session`,
       failOnStatusCode: false,
       body: {
         username: 'test',
@@ -28,7 +30,7 @@ describe('create session', () => {
       .then(response => {
         expect(response.status).to.equal(201);
   
-        return cy.request({ url: 'http://localhost:8082/session', failOnStatusCode: false });
+        return cy.request({ url: `${baseUrl}/session`, failOnStatusCode: false });
       })
       .then(response => {
         expect(response.status).to.equal(200);
@@ -40,7 +42,7 @@ describe('create session', () => {
   it('returns 401 if the password is wrong', () => {
     cy.request({
       method: 'POST',
-      url: 'http://localhost:8082/session',
+      url: `${baseUrl}/session`,
       failOnStatusCode: false,
       body: {
         username: 'test',
@@ -57,7 +59,7 @@ describe('delete a session', () => {
   it('deletes a session', function() {
     cy.request({
       method: 'DELETE',
-      url: 'http://localhost:8082/session',
+      url: `${baseUrl}/session`,
       failOnStatusCode: false,
       body: {
         username: 'test',
@@ -67,7 +69,7 @@ describe('delete a session', () => {
       .then(response => {
         expect(response.status).to.equal(204);
   
-        return cy.request({ url: 'http://localhost:8082/session', failOnStatusCode: false });
+        return cy.request({ url: `${baseUrl}/session`, failOnStatusCode: false });
       })
       .then(response => {
         expect(response.status).to.equal(401);

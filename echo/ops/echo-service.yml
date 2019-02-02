@@ -7,18 +7,17 @@ metadata:
       ---
       apiVersion: ambassador/v0
       kind:  Mapping
-      name:  httpbin_mapping
+      name:  echo_mapping
       prefix: /echo/
       service: echo:8080
   labels:
-    app: multisvc
     tier: frontend
 spec:
   type: ClusterIP
   ports:
   - port: 8080
   selector:
-    app: multisvc
+    app: echo
     tier: frontend
 ---
 apiVersion: apps/v1
@@ -26,13 +25,13 @@ kind: Deployment
 metadata:
   name: echo
   labels:
-    app: multisvc
+    app: echo
 spec:
   selector:
     matchLabels:
-      app: multisvc
+      app: echo
       tier: frontend
-  replicas: 3
+  replicas: 1
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -41,12 +40,12 @@ spec:
   template:
     metadata:
       labels:
-        app: multisvc
+        app: echo
         tier: frontend
     spec:
       containers:
-      - name: multisvc
-        image: jasonblanchard/multisvc-echo:1
+      - name: echo
+        image: jasonblanchard/multisvc-echo:3
         env:
           - name: 'PORT'
             value: '8080'

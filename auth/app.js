@@ -27,7 +27,7 @@ app.use(session({
 app.use(cookieParser());
 
 app.get('/health', (request, response) => {
-  return response.json({ status: 'ok' });
+  return response.json({ status: 'ok', service: 'auth', version: 3 });
 });
  
 app.post('/session', (request, response) => {
