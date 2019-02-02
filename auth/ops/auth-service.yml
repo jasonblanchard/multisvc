@@ -5,11 +5,19 @@ metadata:
   annotations:
     getambassador.io/config: |
       ---
-      apiVersion: ambassador/v0
+      apiVersion: ambassador/v1
+      kind: AuthService
+      name: authentication
+      auth_service: "auth:8081"
+      path_prefix:  "/session"
+      proto: http
+      ---
+      apiVersion: ambassador/v1
       kind:  Mapping
       name:  auth_mapping
       prefix: /auth/
-      service: auth:8081  
+      service: auth:8081
+      bypass_auth: true
   labels:
     tier: frontend
 spec:
@@ -40,7 +48,7 @@ spec:
     spec:
       containers:
       - name: auth
-        image: jasonblanchard/multisvc-auth:3
+        image: jasonblanchard/multisvc-auth:6
         env:
           - name: 'PORT'
             value: '8081'

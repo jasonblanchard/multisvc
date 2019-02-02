@@ -3,6 +3,7 @@ var session = require('express-session');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var jwt = require('jsonwebtoken');
+var morgan = require('morgan')
 
 const usersByUsername = {
   'test': {
@@ -15,6 +16,8 @@ const usersByUsername = {
 var app = express();
 
 app.use(bodyParser.json());
+
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
  
 app.use(session({
   key: 'session_id',
@@ -27,10 +30,10 @@ app.use(session({
 app.use(cookieParser());
 
 app.get('/health', (request, response) => {
-  return response.json({ status: 'ok', service: 'auth', version: 3 });
+  return response.json({ status: 'ok', service: 'auth', version: 6 });
 });
  
-app.post('/session', (request, response) => {
+app.post('/session*', (request, response) => {
   const { username, password } = request.body;
   const user = usersByUsername[username];
   
@@ -42,7 +45,7 @@ app.post('/session', (request, response) => {
   return response.status(401).end();
 });
 
-app.get('/session', (request, response) => {
+app.get('/session*', (request, response) => {
   if (request.cookies.session_id && request.session.user) {
     // TODO: Cache this and regenerate when it expires
     var token = jwt.sign({ foo: 'bar' }, 'shhhhh');
