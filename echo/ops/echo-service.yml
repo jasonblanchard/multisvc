@@ -1,7 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: widgets
+  name: echo
+  annotations:
+    getambassador.io/config: |
+      ---
+      apiVersion: ambassador/v0
+      kind:  Mapping
+      name:  httpbin_mapping
+      prefix: /echo/
+      service: echo:8080
   labels:
     app: multisvc
     tier: frontend
@@ -16,7 +24,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: widgets
+  name: echo
   labels:
     app: multisvc
 spec:
@@ -38,7 +46,7 @@ spec:
     spec:
       containers:
       - name: multisvc
-        image: jasonblanchard/multisvc-widgets:1
+        image: jasonblanchard/multisvc-echo:1
         env:
           - name: 'PORT'
             value: '8080'
