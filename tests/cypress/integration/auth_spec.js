@@ -98,7 +98,7 @@ describe('auth', () => {
         });
     });
   
-    it('creates a session', function() {
+    it('returns 200 after authenticating', function() {
       cy.request({
         method: 'POST',
         url: `${baseUrl}/auth/session`,
