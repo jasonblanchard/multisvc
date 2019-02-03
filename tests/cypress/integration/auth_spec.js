@@ -1,10 +1,8 @@
-const baseUrl = 'http://192.168.99.105:31312';
-
 describe('auth', () => {
   beforeEach(() => {
     cy.request({
       method: 'DELETE',
-      url: `${baseUrl}/auth/session`,
+      url: 'auth/session',
       failOnStatusCode: false,
       body: {
         username: 'test',
@@ -14,7 +12,7 @@ describe('auth', () => {
   });
   
   it('Checks health', function() {
-    cy.request(`${baseUrl}/auth/health`)
+    cy.request('auth/health')
       .then(response => {
         expect(response.status).to.equal(200);
       });
@@ -22,7 +20,7 @@ describe('auth', () => {
   
   describe('get session', () => {
     it('Gets a 401 when not authorized', function() {
-      cy.request({ url: `${baseUrl}/auth/session`, failOnStatusCode: false })
+      cy.request({ url: 'auth/session', failOnStatusCode: false })
         .then(response => {
           expect(response.status).to.equal(401);
         });
@@ -33,7 +31,7 @@ describe('auth', () => {
     it('creates a session', function() {
       cy.request({
         method: 'POST',
-        url: `${baseUrl}/auth/session`,
+        url: 'auth/session',
         failOnStatusCode: false,
         body: {
           username: 'test',
@@ -43,7 +41,7 @@ describe('auth', () => {
         .then(response => {
           expect(response.status).to.equal(201);
     
-          return cy.request({ url: `${baseUrl}/auth/session`, failOnStatusCode: false });
+          return cy.request({ url: 'auth/session', failOnStatusCode: false });
         })
         .then(response => {
           expect(response.status).to.equal(200);
@@ -55,7 +53,7 @@ describe('auth', () => {
     it('returns 401 if the password is wrong', () => {
       cy.request({
         method: 'POST',
-        url: `${baseUrl}/auth/session`,
+        url: 'auth/session',
         failOnStatusCode: false,
         body: {
           username: 'test',
@@ -72,7 +70,7 @@ describe('auth', () => {
     it('deletes a session', function() {
       cy.request({
         method: 'DELETE',
-        url: `${baseUrl}/auth/session`,
+        url: 'auth/session',
         failOnStatusCode: false,
         body: {
           username: 'test',
@@ -82,7 +80,7 @@ describe('auth', () => {
         .then(response => {
           expect(response.status).to.equal(204);
     
-          return cy.request({ url: `${baseUrl}/auth/session`, failOnStatusCode: false });
+          return cy.request({ url: 'auth/session', failOnStatusCode: false });
         })
         .then(response => {
           expect(response.status).to.equal(401);
@@ -92,7 +90,7 @@ describe('auth', () => {
   
   describe('protected paths', () => {
     it('Gets a 401 when not authorized', function() {
-      cy.request({ url: `${baseUrl}/echo/health`, failOnStatusCode: false })
+      cy.request({ url: 'echo/health', failOnStatusCode: false })
         .then(response => {
           expect(response.status).to.equal(401);
         });
@@ -101,7 +99,7 @@ describe('auth', () => {
     it('returns 200 after authenticating', function() {
       cy.request({
         method: 'POST',
-        url: `${baseUrl}/auth/session`,
+        url: 'auth/session',
         failOnStatusCode: false,
         body: {
           username: 'test',
@@ -111,7 +109,7 @@ describe('auth', () => {
         .then(response => {
           expect(response.status).to.equal(201);
     
-          return cy.request({ url: `${baseUrl}/echo/health`, failOnStatusCode: false });
+          return cy.request({ url: 'echo/health', failOnStatusCode: false });
         })
         .then(response => {
           expect(response.status).to.equal(200);
