@@ -14,6 +14,12 @@ $ kubectl create -f auth/ops/
 $ kubectl create -f echo/ops/
 ```
 
+If you make changes to a resource config file, apply it like this:
+
+```
+$ kubectl apply -f auth/ops/
+```
+
 Find gateway URL
 ```
 $ minikube services list
