@@ -21,33 +21,26 @@ metadata:
       prefix: /auth/
       service: auth:8081
       bypass_auth: true
-  labels:
-    tier: frontend
 spec:
   type: ClusterIP
   ports:
   - port: 8081
   selector:
     app: auth
-    tier: frontend
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: auth
-  labels:
-    app: auth
 spec:
   selector:
     matchLabels:
       app: auth
-      tier: frontend
   replicas: 1 # Important until implement RedisStore for sessions
   template:
     metadata:
       labels:
         app: auth
-        tier: frontend
     spec:
       containers:
       - name: auth
