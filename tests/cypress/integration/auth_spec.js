@@ -20,7 +20,7 @@ describe('auth', () => {
   
   describe('get session', () => {
     it('Gets a 401 when not authorized', function() {
-      cy.request({ url: 'auth/session', failOnStatusCode: false })
+      cy.request({ url: 'auth/session/authn', failOnStatusCode: false })
         .then(response => {
           expect(response.status).to.equal(401);
         });
@@ -41,11 +41,10 @@ describe('auth', () => {
         .then(response => {
           expect(response.status).to.equal(201);
     
-          return cy.request({ url: 'auth/session', failOnStatusCode: false });
+          return cy.request({ url: 'auth/session/authn', failOnStatusCode: false });
         })
         .then(response => {
           expect(response.status).to.equal(200);
-          console.log(response);
           expect(response.headers.authorization).to.match(/Bearer .+\..+\./);
         });
     });
@@ -80,7 +79,7 @@ describe('auth', () => {
         .then(response => {
           expect(response.status).to.equal(204);
     
-          return cy.request({ url: 'auth/session', failOnStatusCode: false });
+          return cy.request({ url: 'auth/session/authn', failOnStatusCode: false });
         })
         .then(response => {
           expect(response.status).to.equal(401);
@@ -114,6 +113,49 @@ describe('auth', () => {
         .then(response => {
           expect(response.status).to.equal(200);
         });
+      });
+
+      it('requres returns 403 for POST request without csrf token', function() {
+        cy.request({
+          method: 'POST',
+          url: 'auth/session',
+          failOnStatusCode: false,
+          body: {
+            username: 'test',
+            password: 'testpass'
+          }
+        })
+          .then(response => {
+            expect(response.status).to.equal(201);
+            return cy.request({ url: 'echo/update', method: 'POST', failOnStatusCode: false });
+          })
+          .then(response => {
+            expect(response.status).to.equal(403);
+          });
+      });
+
+      it('returns 200 for POST requests with CSRF token', function() {
+        cy.request({
+          method: 'POST',
+          url: 'auth/session',
+          failOnStatusCode: false,
+          body: {
+            username: 'test',
+            password: 'testpass'
+          }
+        })
+          .then(response => {
+            expect(response.status).to.equal(201);
+
+            return cy.request({ url: 'auth/csrf', failOnStatusCode: false });
+          }).then(response => {
+            const csrfToken = response.body.csrfToken;
+            expect(csrfToken).to.match(/\w+/);
+            return cy.request({ url: 'echo/update', method: 'POST', headers: { 'CSRF-Token': response.body.csrfToken }, failOnStatusCode: false });
+          })
+          .then(response => {
+            expect(response.status).to.equal(200);
+          });
       });
     });
 });
