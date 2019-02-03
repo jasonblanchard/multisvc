@@ -48,7 +48,7 @@ spec:
     spec:
       containers:
       - name: auth
-        image: jasonblanchard/multisvc-auth:6
+        image: jasonblanchard/multisvc-auth:7
         env:
           - name: 'PORT'
             value: '8081'

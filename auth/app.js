@@ -30,7 +30,7 @@ app.use(session({
 app.use(cookieParser());
 
 app.get('/health', (request, response) => {
-  return response.json({ status: 'ok', service: 'auth', version: 6 });
+  return response.json({ status: 'ok', service: 'auth', version: 7 });
 });
  
 app.post('/session*', (request, response) => {
