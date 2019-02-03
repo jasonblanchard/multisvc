@@ -33,7 +33,7 @@ app.get('/health', (request, response) => {
   return response.json({ status: 'ok', service: 'auth', version: 7 });
 });
  
-app.post('/session*', (request, response) => {
+app.post('/session', (request, response) => {
   const { username, password } = request.body;
   const user = usersByUsername[username];
   
@@ -45,6 +45,7 @@ app.post('/session*', (request, response) => {
   return response.status(401).end();
 });
 
+// TODO: Change to app.use('/session/authn/*') or something?
 app.get('/session*', (request, response) => {
   if (request.cookies.session_id && request.session.user) {
     // TODO: Cache this and regenerate when it expires

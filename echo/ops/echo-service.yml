@@ -45,7 +45,7 @@ spec:
     spec:
       containers:
       - name: echo
-        image: jasonblanchard/multisvc-echo:4
+        image: jasonblanchard/multisvc-echo:5
         env:
           - name: 'PORT'
             value: '8080'
