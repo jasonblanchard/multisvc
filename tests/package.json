@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "cypress": "^3.1.5"
+    "cypress": "^3.1.5",
+    "graphql-request": "^1.8.2"
   }
 }

@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: graphql
+  annotations:
+    getambassador.io/config: |
+      ---
+      apiVersion: ambassador/v0
+      kind:  Mapping
+      name:  graphql_mapping
+      prefix: /graphql/
+      service: graphql:8080
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+  selector:
+    app: graphql
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: graphql
+spec:
+  selector:
+    matchLabels:
+      app: graphql
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 25%
+  template:
+    metadata:
+      labels:
+        app: graphql
+    spec:
+      containers:
+      - name: graphql
+        image: jasonblanchard/multisvc-graphql:2
+        env:
+          - name: 'PORT'
+            value: '8080'
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          httpGet:
+             path: /health
+             port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          successThreshold: 1
