@@ -5,15 +5,17 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js",
-    "watch": "nodemon app.js"
+    "start": "node src/app.js",
+    "watch": "nodemon src/app.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "apollo-server-express": "^2.3.3",
     "express": "^4.16.4",
+    "google-protobuf": "^3.7.0-rc.2",
     "graphql": "^14.1.1",
+    "grpc": "^1.18.0",
     "nodemon": "^1.18.9"
   }
 }

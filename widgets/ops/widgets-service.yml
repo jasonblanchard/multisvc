@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: widgets
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8081
+  selector:
+    app: widgets
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: widgets
+spec:
+  selector:
+    matchLabels:
+      app: widgets
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: widgets
+    spec:
+      containers:
+      - name: widgets
+        image: jasonblanchard/multisvc-widgets:1
+        env:
+          - name: 'PORT'
+            value: '8081'
+        ports:
+        - containerPort: 8081

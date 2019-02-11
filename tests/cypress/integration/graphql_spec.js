@@ -17,16 +17,8 @@ describe('graphql', () => {
     cy.request({ url: 'auth/csrf', failOnStatusCode: false })
       .then(response => {
         const csrfToken = response.body.csrfToken;
-        // return cy.request({
-        //   url: 'graphql/',
-        //   method: 'POST',
-        //   headers: { 'CSRF-Token': response.body.csrfToken },
-        //   body: {
-        //     query:"{\n  health {\n    status\n  }\n}\n"
-        //   }
-        // });
 
-        const client = new GraphQLClient('http://192.168.99.106:32511/graphql/', {
+        const client = new GraphQLClient('/graphql/', {
           headers: {
             'CSRF-Token': csrfToken,
           },
@@ -45,6 +37,37 @@ describe('graphql', () => {
         const { health } = data;
         expect(health.status).to.equal('ok');
         expect(health.service).to.equal('GraphQL');
+      });
+  });
+
+  it('gets widgets', () => {
+    cy.request({ url: 'auth/csrf', failOnStatusCode: false })
+      .then(response => {
+        const csrfToken = response.body.csrfToken;
+
+        const client = new GraphQLClient('/graphql/', {
+          headers: {
+            'CSRF-Token': csrfToken,
+          },
+        })
+
+        const query = `query getWidget($id: String!) {
+          widget(id: $id) {
+            id
+            name
+          }
+        }`
+
+        const variables = {
+          id: '1'
+        };
+
+        return client.request(query, variables);
+      })
+      .then(data => {
+        const { widget } = data;
+        expect(widget.id).to.equal('1');
+        expect(widget.name).to.equal('Thingy');
       });
   });
 });
