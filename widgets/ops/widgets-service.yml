@@ -25,7 +25,7 @@ spec:
     spec:
       containers:
       - name: widgets
-        image: jasonblanchard/multisvc-widgets:1
+        image: jasonblanchard/multisvc-widgets:2
         env:
           - name: 'PORT'
             value: '8081'

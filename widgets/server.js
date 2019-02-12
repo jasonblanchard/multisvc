@@ -1,5 +1,5 @@
-const messages = require('./widgets_pb.js');
-const services = require('./widgets_grpc_pb.js');
+const messages = require('./protobuf/widgets_service/widgets_pb.js');
+const services = require('./protobuf/widgets_service/widgets_grpc_pb.js');
 const grpc = require('grpc');
 
 function getWidget(call, callback) {

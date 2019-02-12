@@ -1,0 +1,16 @@
+{
+  "name": "multisvc-protobuf",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "protoc:build": "./scripts/build.sh"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "google-protobuf": "^3.7.0-rc.2",
+    "grpc": "^1.18.0",
+    "grpc-tools": "^1.6.6"
+  }
+}

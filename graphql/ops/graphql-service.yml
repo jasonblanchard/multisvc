@@ -38,7 +38,7 @@ spec:
     spec:
       containers:
       - name: graphql
-        image: jasonblanchard/multisvc-graphql:5
+        image: jasonblanchard/multisvc-graphql:6
         env:
           - name: 'PORT'
             value: '8080'

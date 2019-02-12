@@ -3,8 +3,8 @@ const { ApolloServer, gql } = require('apollo-server-express');
 
 // TODO: Figure out how to share these. Share the compiled classes? Or the proto files?
 // Probably proto files and re-compile in each consumer.
-const messages = require('./protos/widgets_pb.js');
-const services = require('./protos/widgets_grpc_pb.js');
+const widgetsMessages = require('./protobuf/widgets_service/widgets_pb.js');
+const widgetsServices = require('./protobuf/widgets_service/widgets_grpc_pb.js');
 const grpc = require('grpc');
 
 // Construct a schema, using GraphQL schema language
@@ -32,13 +32,13 @@ const resolvers = {
     health: () => ({
       status: 'ok',
       service: 'GraphQL',
-      version: 5
+      version: 6
     }),
     widget: (_, args) => {
       return new Promise((resolve, reject) => {
         // TODO: Get service and port from envs?
-        const client = new services.WidgetsClient('widgets:8081', grpc.credentials.createInsecure());
-        const request = new messages.WidgetRequest();
+        const client = new widgetsServices.WidgetsClient('widgets:8081', grpc.credentials.createInsecure());
+        const request = new widgetsMessages.WidgetRequest();
         request.setId(args.id);
 
         client.getWidget(request, (error, response) => {
