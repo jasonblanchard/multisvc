@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package widgets;
+package widgets.authoring;
 
-service Widgets {
+service WidgetAuthoring {
   rpc GetWidget(WidgetRequest) returns (Widget) {}
 }
 

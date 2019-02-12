@@ -1,8 +1,8 @@
-const messages = require('../widgets_pb.js');
-const services = require('../widgets_grpc_pb.js');
+const messages = require('../protobuf/widget_authoring_service/widget_authoring_pb.js');
+const services = require('../protobuf/widget_authoring_service/widget_authoring_grpc_pb.js');
 const grpc = require('grpc');
 
-const client = new services.WidgetsClient('localhost:50051', grpc.credentials.createInsecure());
+const client = new services.WidgetAuthoringClient('localhost:50051', grpc.credentials.createInsecure());
 
 describe('client', () => {
   it('works', done => {

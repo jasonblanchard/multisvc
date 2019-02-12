@@ -1,5 +1,5 @@
-const messages = require('./protobuf/widgets_service/widgets_pb.js');
-const services = require('./protobuf/widgets_service/widgets_grpc_pb.js');
+const messages = require('./protobuf/widget_authoring_service/widget_authoring_pb.js');
+const services = require('./protobuf/widget_authoring_service/widget_authoring_grpc_pb.js');
 const grpc = require('grpc');
 
 function getWidget(call, callback) {
@@ -10,7 +10,7 @@ function getWidget(call, callback) {
 }
 
 var server = new grpc.Server();
-server.addService(services.WidgetsService, {
+server.addService(services.WidgetAuthoringService, {
   getWidget,
 });
 
