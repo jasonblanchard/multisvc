@@ -1,71 +1,86 @@
 const express = require('express');
 const { ApolloServer, gql } = require('apollo-server-express');
+const {
+  introspectSchema,
+  makeExecutableSchema,
+  mergeSchemas,
+  makeRemoteExecutableSchema
+} = require('graphql-tools');
+const { HttpLink } = require('apollo-link-http');
+const fetch = require('node-fetch');
 
-// TODO: Figure out how to share these. Share the compiled classes? Or the proto files?
-// Probably proto files and re-compile in each consumer.
-const widgetAuthoringMessages = require('./protobuf/widget_authoring_service/widget_authoring_pb.js');
-const widgetAuthoringServices = require('./protobuf/widget_authoring_service/widget_authoring_grpc_pb.js');
-const grpc = require('grpc');
+require('dotenv').config();
 
-// Construct a schema, using GraphQL schema language
-const typeDefs = gql`
-  type Health {
-    status: String
-    service: String
-    version: Int
-  }
+function getRemoveExecutableSchema(uri) {
+  const link = new HttpLink({ uri, fetch });
 
-  type Widget {
-    id: String
-    name: String
-  }
+  return introspectSchema(link)
+    .then(schema => {
+      return makeRemoteExecutableSchema({
+        schema,
+        link,
+      });      
+    });
+}
 
-  type Query {
-    health: Health
-    widget(id: String!): Widget
-  }
-`;
+// TODO: This is suuuuuper dumb, but should eliminate startup order issues.
+// TODO: Also need to tackle the schema change problem. Will need to bounce this server in the meantime to pick up changes.
+const interval = setInterval(() => {
+  const getRemoteExecutableSchemas = Promise.all([
+    getRemoveExecutableSchema(process.env.WIDGET_AUTHORING_SERVICE_PRESENTER_PATH)
+  ]);
 
-// Provide resolver functions for your schema fields
-const resolvers = {
-  Query: {
-    health: () => ({
-      status: 'ok',
-      service: 'GraphQL',
-      version: 7
-    }),
-    widget: (_, args) => {
-      return new Promise((resolve, reject) => {
-        // TODO: Get service and port from envs?
-        const client = new widgetAuthoringServices.WidgetAuthoringClient('widget-authoring:8081', grpc.credentials.createInsecure());
-        const request = new widgetAuthoringMessages.WidgetRequest();
-        request.setId(args.id);
-
-        client.getWidget(request, (error, response) => {
-          resolve({
-            id: response.getId(),
-            name: response.getName(),
-          });
-        });
-      });
-    }
-  },
-};
-
-const server = new ApolloServer({ typeDefs, resolvers });
-
-const app = express();
-
-app.get('/health', (request, response) => {
-  response.json({ status: 'ok' });
-});
-
-const path = '/';
-
-server.applyMiddleware({ app, path });
-
-const port = process.env.PORT || 8002;
-
-app.listen({ port }, () =>
-  console.log(`🚀 Server ready at http://localhost:${port}${server.graphqlPath}`),
-);
+  getRemoteExecutableSchemas.then(remoteExecutableSchemas => {
+    clearInterval(interval);
+    
+    const typeDefs = gql`
+      type Health {
+        status: String
+        service: String
+        version: Int
+      }
+    
+      type Query {
+        health: Health
+      }
+    `;
+    
+    const resolvers = {
+      Query: {
+        health: () => ({
+          status: 'ok',
+          service: 'GraphQL',
+          version: 8
+        }),
+      },
+    };
+    
+    const schema = mergeSchemas({
+      schemas:[
+        makeExecutableSchema({ typeDefs, resolvers }),
+        ...remoteExecutableSchemas
+      ]
+    });
+    
+    const server = new ApolloServer({ schema });
+    
+    const app = express();
+    
+    app.get('/health', (request, response) => {
+      response.json({ status: 'ok' });
+    });
+    
+    const path = '/';
+    
+    server.applyMiddleware({ app, path });
+    
+    const port = process.env.PORT || 8002;
+    
+    app.listen({ port }, () =>
+      console.log(`🚀 Server ready at http://localhost:${port}${server.graphqlPath}`),
+    );
+  }).catch(error => {
+    console.log(error.message);
+    console.log('Retrying');
+  });
+}, 1000);

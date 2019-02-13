@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: widget-authoring-presenter
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+  selector:
+    app: widget-authoring-presenter
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: widget-authoring-presenter
+spec:
+  selector:
+    matchLabels:
+      app: widget-authoring-presenter
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 25%
+  template:
+    metadata:
+      labels:
+        app: widget-authoring-presenter
+    spec:
+      containers:
+      - name: widget-authoring-presenter
+        image: jasonblanchard/multisvc-widget-authoring-presenter:2
+        env:
+          - name: 'PORT'
+            value: '80'
+          - name: 'WIDGET_AUTHORING_SERVICE_HOST'
+            value: 'widget-authoring:8081'
+        ports:
+        - containerPort: 80

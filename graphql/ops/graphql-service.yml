@@ -38,10 +38,12 @@ spec:
     spec:
       containers:
       - name: graphql
-        image: jasonblanchard/multisvc-graphql:7
+        image: jasonblanchard/multisvc-graphql:8
         env:
           - name: 'PORT'
             value: '8080'
+          - name: 'WIDGET_AUTHORING_SERVICE_PRESENTER_PATH'
+            value: 'http://widget-authoring-presenter/graphql'
         ports:
         - containerPort: 8080
         readinessProbe:
