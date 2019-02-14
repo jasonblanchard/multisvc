@@ -30,7 +30,7 @@ spec:
     spec:
       containers:
       - name: widget-authoring-presenter
-        image: jasonblanchard/multisvc-widget-authoring-presenter:2
+        image: jasonblanchard/multisvc-widget-authoring-presenter:3
         env:
           - name: 'PORT'
             value: '80'

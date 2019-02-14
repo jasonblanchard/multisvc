@@ -50,7 +50,7 @@ const interval = setInterval(() => {
         health: () => ({
           status: 'ok',
           service: 'GraphQL',
-          version: 8
+          version: 9
         }),
       },
     };
