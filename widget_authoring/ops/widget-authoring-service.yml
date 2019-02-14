@@ -6,6 +6,7 @@ spec:
   type: ClusterIP
   ports:
   - port: 80
+    name: grpc
   selector:
     app: widget-authoring
 ---
@@ -22,6 +23,7 @@ spec:
     metadata:
       labels:
         app: widget-authoring
+        version: '2'
     spec:
       containers:
       - name: widget-authoring

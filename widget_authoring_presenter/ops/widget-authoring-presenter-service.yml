@@ -6,6 +6,7 @@ spec:
   type: ClusterIP
   ports:
   - port: 80
+    name: http
   selector:
     app: widget-authoring-presenter
 ---
@@ -27,6 +28,7 @@ spec:
     metadata:
       labels:
         app: widget-authoring-presenter
+        version: '3'
     spec:
       containers:
       - name: widget-authoring-presenter
