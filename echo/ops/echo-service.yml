@@ -9,11 +9,11 @@ metadata:
       kind:  Mapping
       name:  echo_mapping
       prefix: /echo/
-      service: echo:8080
+      service: echo
 spec:
   type: ClusterIP
   ports:
-  - port: 8080
+  - port: 80
   selector:
     app: echo
 ---
@@ -41,13 +41,13 @@ spec:
         image: jasonblanchard/multisvc-echo:5
         env:
           - name: 'PORT'
-            value: '8080'
+            value: '80'
         ports:
-        - containerPort: 8080
+        - containerPort: 80
         readinessProbe:
           httpGet:
              path: /health
-             port: 8080
+             port: 80
           initialDelaySeconds: 5
           periodSeconds: 5
           successThreshold: 1

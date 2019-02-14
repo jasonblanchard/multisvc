@@ -8,7 +8,7 @@ metadata:
       apiVersion: ambassador/v1
       kind: AuthService
       name: authentication
-      auth_service: "auth:8081"
+      auth_service: "auth"
       path_prefix:  "/session/authn"
       proto: http
       allow_request_body: true
@@ -19,12 +19,12 @@ metadata:
       kind:  Mapping
       name:  auth_mapping
       prefix: /auth/
-      service: auth:8081
+      service: auth
       bypass_auth: true
 spec:
   type: ClusterIP
   ports:
-  - port: 8081
+  - port: 80
   selector:
     app: auth
 ---
@@ -47,13 +47,13 @@ spec:
         image: jasonblanchard/multisvc-auth:9
         env:
           - name: 'PORT'
-            value: '8081'
+            value: '80'
         ports:
-        - containerPort: 8081
+        - containerPort: 80
         readinessProbe:
           httpGet:
              path: /health
-             port: 8081
+             port: 80
           initialDelaySeconds: 5
           periodSeconds: 5
           successThreshold: 1

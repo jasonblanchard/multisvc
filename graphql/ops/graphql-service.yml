@@ -9,11 +9,11 @@ metadata:
       kind:  Mapping
       name:  graphql_mapping
       prefix: /graphql/
-      service: graphql:8080
+      service: graphql
 spec:
   type: ClusterIP
   ports:
-  - port: 8080
+  - port: 80
   selector:
     app: graphql
 ---
@@ -41,15 +41,15 @@ spec:
         image: jasonblanchard/multisvc-graphql:8
         env:
           - name: 'PORT'
-            value: '8080'
+            value: '80'
           - name: 'WIDGET_AUTHORING_SERVICE_PRESENTER_PATH'
             value: 'http://widget-authoring-presenter/graphql'
         ports:
-        - containerPort: 8080
+        - containerPort: 80
         readinessProbe:
           httpGet:
              path: /health
-             port: 8080
+             port: 80
           initialDelaySeconds: 5
           periodSeconds: 5
           successThreshold: 1
