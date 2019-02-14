@@ -8,7 +8,7 @@ let counter = 0;
 app.use(bodyParser.json());
 
 app.get('/health', (request, response) => {
-  return response.json({ status: 'ok', service: 'echo', version: 5 });
+  return response.json({ status: 'ok', service: 'echo', version: 6 });
 });
 
 app.post('/update', (request, response) => {

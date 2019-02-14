@@ -32,7 +32,7 @@ const csrfProtection = csrf();
 app.use(cookieParser());
 
 app.get('/health', (request, response) => {
-  return response.json({ status: 'ok', service: 'auth', version: 9 });
+  return response.json({ status: 'ok', service: 'auth', version: 10 });
 });
  
 app.post('/session', (request, response) => {

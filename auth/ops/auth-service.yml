@@ -44,7 +44,7 @@ spec:
     spec:
       containers:
       - name: auth
-        image: jasonblanchard/multisvc-auth:9
+        image: jasonblanchard/multisvc-auth:10
         env:
           - name: 'PORT'
             value: '80'
