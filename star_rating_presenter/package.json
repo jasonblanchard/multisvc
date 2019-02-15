@@ -1,5 +1,5 @@
 {
-  "name": "multisvc-graphql",
+  "name": "multisvc-star-rating-presenter",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,16 +11,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "apollo-fetch": "^0.7.0",
-    "apollo-link-http": "^1.5.11",
-    "apollo-link-retry": "^2.2.10",
-    "apollo-server-express": "^2.3.3",
+    "apollo-server-express": "^2.4.0",
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
     "google-protobuf": "^3.7.0-rc.2",
     "graphql": "^14.1.1",
     "grpc": "^1.18.0",
-    "node-fetch": "^2.3.0",
-    "nodemon": "^1.18.9"
+    "morgan": "^1.9.1",
+    "nodemon": "^1.18.10"
   }
 }

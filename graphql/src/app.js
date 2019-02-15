@@ -9,10 +9,22 @@ const {
 const { HttpLink } = require('apollo-link-http');
 const fetch = require('node-fetch');
 
+
 require('dotenv').config();
 
+
+// TODO: Figure out how to pass in an authenticated user context to the stitched schemas
 function getRemoveExecutableSchema(uri) {
-  const link = new HttpLink({ uri, fetch });
+  const http = new HttpLink({ uri, fetch });
+  
+  const link = setContext((request, previousContext) => {
+    console.log(request);
+    return {
+      headers: {
+        'Authorization': 'asdf',
+      }
+    }
+  }).concat(http);  
 
   return introspectSchema(link)
     .then(schema => {
@@ -27,7 +39,8 @@ function getRemoveExecutableSchema(uri) {
 // TODO: Also need to tackle the schema change problem. Will need to bounce this server in the meantime to pick up changes.
 const interval = setInterval(() => {
   const getRemoteExecutableSchemas = Promise.all([
-    getRemoveExecutableSchema(process.env.WIDGET_AUTHORING_SERVICE_PRESENTER_PATH)
+    getRemoveExecutableSchema(process.env.WIDGET_AUTHORING_SERVICE_PRESENTER_PATH),
+    getRemoveExecutableSchema(process.env.STAR_RATING_PRESENTER_PATH)
   ]);
 
   getRemoteExecutableSchemas.then(remoteExecutableSchemas => {

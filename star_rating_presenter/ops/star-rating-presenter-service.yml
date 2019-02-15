@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: star-rating-presenter
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    name: http
+  selector:
+    app: star-rating-presenter
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: star-rating-presenter
+spec:
+  selector:
+    matchLabels:
+      app: star-rating-presenter
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 25%
+  template:
+    metadata:
+      labels:
+        app: star-rating-presenter
+        version: '1'
+    spec:
+      containers:
+      - name: star-rating-presenter
+        image: jasonblanchard/multisvc-star-rating-presenter:1
+        env:
+          - name: 'PORT'
+            value: '80'
+        ports:
+        - containerPort: 80

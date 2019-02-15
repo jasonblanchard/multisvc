@@ -36,16 +36,18 @@ spec:
     metadata:
       labels:
         app: graphql
-        version: '9'
+        version: '11'
     spec:
       containers:
       - name: graphql
-        image: jasonblanchard/multisvc-graphql:9
+        image: jasonblanchard/multisvc-graphql:11
         env:
           - name: 'PORT'
             value: '80'
           - name: 'WIDGET_AUTHORING_SERVICE_PRESENTER_PATH'
             value: 'http://widget-authoring-presenter/graphql'
+          - name: 'STAR_RATING_PRESENTER_PATH'
+            value: 'http://star-rating-presenter/graphql'
         ports:
         - containerPort: 80
         readinessProbe:
