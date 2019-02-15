@@ -47,7 +47,7 @@ First, [install telepresence](https://www.telepresence.io/reference/install) the
 
 ```
 $ cd echo
-$ telepresence --swap-deployment echo --docker-run --rm -v $(pwd)/src:/home/app/src jasonblanchard/multisvc-echo:4 npm run watch
+$ telepresence --expose 80 --swap-deployment echo --namespace multisvc --docker-run --rm -v $(pwd)/src:/home/app/src jasonblanchard/multisvc-echo:4 npm run watch
 ```
 
 The `echo` deployment should be proxying against this local container. Changes you make locally should show up.

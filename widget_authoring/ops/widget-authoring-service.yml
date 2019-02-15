@@ -23,11 +23,11 @@ spec:
     metadata:
       labels:
         app: widget-authoring
-        version: '2'
+        version: '4'
     spec:
       containers:
       - name: widget-authoring
-        image: jasonblanchard/multisvc-widget-authoring:2
+        image: jasonblanchard/multisvc-widget-authoring:4
         env:
           - name: 'PORT'
             value: '80'

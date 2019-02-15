@@ -4,10 +4,15 @@ package widgets.authoring;
 
 service WidgetAuthoring {
   rpc GetWidget(WidgetRequest) returns (Widget) {}
+  rpc CreateWidget(CreateWidgetRequest) returns (Widget) {}
 }
 
 message WidgetRequest {
   string id = 1;
+}
+
+message CreateWidgetRequest {
+  string name = 1;
 }
 
 message Widget {

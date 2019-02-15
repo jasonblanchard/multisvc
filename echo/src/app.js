@@ -18,3 +18,4 @@ app.post('/update', (request, response) => {
 });
 
 app.listen(process.env.PORT || 8082);
+console.log(`Listening on port ${process.env.PORT}`)

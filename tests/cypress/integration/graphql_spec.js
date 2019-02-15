@@ -82,8 +82,7 @@ describe('graphql', () => {
             variables
           },
           method: 'POST',
-          headers: { 'CSRF-Token': response.body.csrfToken },
-          failOnStatusCode: false
+          headers: { 'CSRF-Token': response.body.csrfToken }
         });
       })
       .then(response => {
@@ -91,6 +90,38 @@ describe('graphql', () => {
         const widget = response.body.data.widget;
         expect(widget.id).to.equal('1');
         expect(widget.name).to.equal('Thingy');
+      });
+  });
+
+  it('creates widgets', () => {
+    cy.request({ url: 'auth/csrf', failOnStatusCode: false })
+      .then(response => {
+        const csrfToken = response.body.csrfToken;
+
+        const query = `mutation createWidget($name: String!) {
+          createWidget(name: $name) {
+            id
+            name
+          }
+        }`
+
+        const variables = {
+          name: 'Another thingy'
+        };
+
+        return cy.request({
+          url: '/graphql/',
+          body: {
+            query,
+            variables
+          },
+          method: 'POST',
+          headers: { 'CSRF-Token': response.body.csrfToken }
+        });
+      })
+      .then(response => {
+        const widget = response.body.data.createWidget;
+        expect(widget.name).to.equal('Another thingy');
       });
   });
 });
