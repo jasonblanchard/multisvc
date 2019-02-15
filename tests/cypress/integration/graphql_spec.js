@@ -18,11 +18,11 @@ describe('graphql', () => {
       .then(response => {
         const csrfToken = response.body.csrfToken;
 
-        const client = new GraphQLClient('/graphql/', {
-          headers: {
-            'CSRF-Token': csrfToken,
-          },
-        })
+        // const client = new GraphQLClient('/graphql/', {
+        //   headers: {
+        //     'CSRF-Token': csrfToken,
+        //   },
+        // })
 
         const query = `{
           health {
@@ -31,10 +31,22 @@ describe('graphql', () => {
           }
         }`
 
-        return client.request(query);
+        // TODO: Figure out why non cy-request promises aren't working in headless mode.
+        // return client.request(query);
+        return cy.request({
+          url: '/graphql/',
+          body: {
+            query
+          },
+          method: 'POST',
+          headers: { 'CSRF-Token': response.body.csrfToken },
+          failOnStatusCode: false
+        });
       })
-      .then(data => {
-        const { health } = data;
+      .then(response => {
+        expect(response.status).to.equal(200);
+        const health = response.body.data.health;
+        // const { health } = data;
         expect(health.status).to.equal('ok');
         expect(health.service).to.equal('GraphQL');
       });
@@ -45,11 +57,11 @@ describe('graphql', () => {
       .then(response => {
         const csrfToken = response.body.csrfToken;
 
-        const client = new GraphQLClient('/graphql/', {
-          headers: {
-            'CSRF-Token': csrfToken,
-          },
-        })
+        // const client = new GraphQLClient('/graphql/', {
+        //   headers: {
+        //     'CSRF-Token': csrfToken,
+        //   },
+        // })
 
         const query = `query getWidget($id: String!) {
           widget(id: $id) {
@@ -62,10 +74,21 @@ describe('graphql', () => {
           id: '1'
         };
 
-        return client.request(query, variables);
+        // return client.request(query, variables);
+        return cy.request({
+          url: '/graphql/',
+          body: {
+            query,
+            variables
+          },
+          method: 'POST',
+          headers: { 'CSRF-Token': response.body.csrfToken },
+          failOnStatusCode: false
+        });
       })
-      .then(data => {
-        const { widget } = data;
+      .then(response => {
+        // const { widget } = data;
+        const widget = response.body.data.widget;
         expect(widget.id).to.equal('1');
         expect(widget.name).to.equal('Thingy');
       });
