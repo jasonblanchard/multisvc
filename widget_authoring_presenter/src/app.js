@@ -16,7 +16,7 @@ const typeDefs = gql`
   }
 
   type Query {
-    widget(id: String!): Widget
+    widgetById(id: String!): Widget
   }
 
   type Mutation {
@@ -28,12 +28,12 @@ const client = new widgetAuthoringServices.WidgetAuthoringClient(process.env.WID
 
 const resolvers = {
   Query: {
-    widget: (_, args) => {
+    widgetById: (_, args) => {
       return new Promise((resolve, reject) => {
         const request = new widgetAuthoringMessages.WidgetRequest();
         request.setId(args.id);
 
-        client.getWidget(request, (error, response) => {
+        client.getWidgetById(request, (error, response) => {
           if (!response) return resolve(null);
           resolve({
             id: response.getId(),

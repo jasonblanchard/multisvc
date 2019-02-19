@@ -15,7 +15,7 @@ const widgetsById = {
   }
 }
 
-function getWidget(call, callback) {
+function getWidgetById(call, callback) {
   const widget = widgetsById[call.request.getId()];
   const reply = new messages.Widget();
   reply.setId(widget.id);
@@ -40,7 +40,7 @@ function createWidget(call, callback) {
 
 var server = new grpc.Server();
 server.addService(services.WidgetAuthoringService, {
-  getWidget,
+  getWidgetById,
   createWidget,
 });
 

@@ -63,8 +63,8 @@ describe('graphql', () => {
         //   },
         // })
 
-        const query = `query getWidget($id: String!) {
-          widget(id: $id) {
+        const query = `query getWidgetById($id: String!) {
+          widgetById(id: $id) {
             id
             name
           }
@@ -87,7 +87,7 @@ describe('graphql', () => {
       })
       .then(response => {
         // const { widget } = data;
-        const widget = response.body.data.widget;
+        const widget = response.body.data.widgetById;
         expect(widget.id).to.equal('1');
         expect(widget.name).to.equal('Thingy');
       });

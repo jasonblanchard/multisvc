@@ -9,7 +9,7 @@ describe('client', () => {
     const request = new messages.WidgetRequest();
     request.setId('1');
 
-    client.getWidget(request, (error, response) => {
+    client.getWidgetById(request, (error, response) => {
       expect(response.getId()).toEqual('1');
       expect(response.getName()).toEqual('Thingy');
       done();

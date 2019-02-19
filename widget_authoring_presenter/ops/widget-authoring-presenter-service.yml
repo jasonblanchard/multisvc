@@ -28,11 +28,11 @@ spec:
     metadata:
       labels:
         app: widget-authoring-presenter
-        version: '9'
+        version: '10'
     spec:
       containers:
       - name: widget-authoring-presenter
-        image: jasonblanchard/multisvc-widget-authoring-presenter:9
+        image: jasonblanchard/multisvc-widget-authoring-presenter:10
         env:
           - name: 'PORT'
             value: '80'

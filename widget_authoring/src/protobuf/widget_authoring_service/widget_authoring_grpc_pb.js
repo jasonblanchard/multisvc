@@ -39,8 +39,8 @@ function deserialize_widgets_authoring_WidgetRequest(buffer_arg) {
 
 
 var WidgetAuthoringService = exports.WidgetAuthoringService = {
-  getWidget: {
-    path: '/widgets.authoring.WidgetAuthoring/GetWidget',
+  getWidgetById: {
+    path: '/widgets.authoring.WidgetAuthoring/GetWidgetById',
     requestStream: false,
     responseStream: false,
     requestType: widget_authoring_service_widget_authoring_pb.WidgetRequest,
