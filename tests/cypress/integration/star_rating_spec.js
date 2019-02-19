@@ -16,8 +16,8 @@ describe('star ratings', () => {
       .then(response => {
         const csrfToken = response.body.csrfToken;
 
-        const query = `query getStarRatingsByRatableId($ratableId: String!) {
-          getStarRatingsByRatableId(ratableId: $ratableId) {
+        const query = `query starRatingsByRatableId($ratableId: String!) {
+          starRatingsByRatableId(ratableId: $ratableId) {
             id
             rating
           }
@@ -38,7 +38,7 @@ describe('star ratings', () => {
         });
       })
       .then(response => {
-        const starRating = response.body.data.getStarRatingsByRatableId[0];
+        const starRating = response.body.data.starRatingsByRatableId[0];
         expect(starRating.id).to.equal('1');
         expect(starRating.rating).to.equal(3);
       });

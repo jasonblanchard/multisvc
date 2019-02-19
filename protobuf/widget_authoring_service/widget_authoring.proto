@@ -3,7 +3,7 @@ syntax = "proto3";
 package widgets.authoring;
 
 service WidgetAuthoring {
-  rpc GetWidget(WidgetRequest) returns (Widget) {}
+  rpc GetWidgetById(WidgetRequest) returns (Widget) {}
   rpc CreateWidget(CreateWidgetRequest) returns (Widget) {}
 }
 

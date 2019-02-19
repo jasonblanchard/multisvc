@@ -28,11 +28,11 @@ spec:
     metadata:
       labels:
         app: star-rating-presenter
-        version: '1'
+        version: '2'
     spec:
       containers:
       - name: star-rating-presenter
-        image: jasonblanchard/multisvc-star-rating-presenter:1
+        image: jasonblanchard/multisvc-star-rating-presenter:2
         env:
           - name: 'PORT'
             value: '80'

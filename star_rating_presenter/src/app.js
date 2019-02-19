@@ -14,13 +14,14 @@ const typeDefs = gql`
   }
 
   type Query {
-    getStarRatingsByRatableId(ratableId: String!): [StarRating]
+    starRatingsByRatableId(ratableId: String!): [StarRating]
   }
 `;
 
 const resolvers = {
   Query: {
-    getStarRatingsByRatableId: (_parent, _args, context) => {
+    // TODO: CHange to starRatingsByRatableId
+    starRatingsByRatableId: (_parent, _args, context) => {
       // TODO: Figure out how to get an authenticated user id in here from the graphql service
       return new Promise((resolve, reject) => {
         return resolve([
