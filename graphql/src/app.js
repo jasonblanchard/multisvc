@@ -8,6 +8,7 @@ const {
 } = require('graphql-tools');
 const { HttpLink } = require('apollo-link-http');
 const fetch = require('node-fetch');
+const { setContext } = require('apollo-link-context');
 
 
 require('dotenv').config();
