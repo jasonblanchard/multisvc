@@ -35,7 +35,7 @@ app.get('/health', (request, response) => {
   return response.json({ status: 'ok', service: 'auth', version: 10 });
 });
  
-app.post('/session', (request, response) => {
+app.post('/login', (request, response) => {
   const { username, password } = request.body;
   const user = usersByUsername[username];
   
@@ -62,8 +62,10 @@ app.use('/session/authn*', csrfProtection, (request, response) => {
 });
 
 app.delete('/session', (request, response) => {
-  response.clearCookie('sessionId');
-  response.status(204).end();
+  request.session.destroy(error => {
+    response.clearCookie('sessionId');
+    response.status(204).end();
+  });
 });
 
 app.use(function (err, request, response, next) {

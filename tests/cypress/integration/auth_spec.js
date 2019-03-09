@@ -31,7 +31,7 @@ describe('auth', () => {
     it('creates a session', function() {
       cy.request({
         method: 'POST',
-        url: 'auth/session',
+        url: 'auth/login',
         failOnStatusCode: false,
         body: {
           username: 'test',
@@ -52,7 +52,7 @@ describe('auth', () => {
     it('returns 401 if the password is wrong', () => {
       cy.request({
         method: 'POST',
-        url: 'auth/session',
+        url: 'auth/login',
         failOnStatusCode: false,
         body: {
           username: 'test',
@@ -98,7 +98,7 @@ describe('auth', () => {
     it('returns 200 after authenticating', function() {
       cy.request({
         method: 'POST',
-        url: 'auth/session',
+        url: 'auth/login',
         failOnStatusCode: false,
         body: {
           username: 'test',
@@ -118,7 +118,7 @@ describe('auth', () => {
       it('requres returns 403 for POST request without csrf token', function() {
         cy.request({
           method: 'POST',
-          url: 'auth/session',
+          url: 'auth/login',
           failOnStatusCode: false,
           body: {
             username: 'test',
@@ -137,7 +137,7 @@ describe('auth', () => {
       it('returns 200 for POST requests with CSRF token', function() {
         cy.request({
           method: 'POST',
-          url: 'auth/session',
+          url: 'auth/login',
           failOnStatusCode: false,
           body: {
             username: 'test',

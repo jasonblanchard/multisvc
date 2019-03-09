@@ -4,7 +4,7 @@ describe('graphql', () => {
   beforeEach(() => {
     cy.request({
       method: 'POST',
-      url: 'auth/session',
+      url: 'auth/login',
       failOnStatusCode: false,
       body: {
         username: 'test',
