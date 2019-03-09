@@ -54,7 +54,7 @@ app.get('/csrf', csrfProtection, (request, response) => {
 app.use('/session/authn*', csrfProtection, (request, response) => {
   if (request.cookies.sessionId && request.session.user) {
     // TODO: Cache this and regenerate when it expires
-    var token = jwt.sign({ foo: 'bar' }, 'shhhhh');
+    var token = jwt.sign({ authenticatedUserId: request.session.user.id }, 'shhhhh');
     response.header('Authorization', `Bearer ${token}`);
     return response.status(200).end();
   }

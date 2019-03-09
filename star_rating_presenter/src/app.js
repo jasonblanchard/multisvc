@@ -2,6 +2,7 @@ const express = require('express');
 const { ApolloServer, gql } = require('apollo-server-express');
 const { makeExecutableSchema } = require('graphql-tools');
 const morgan = require('morgan')
+jwt = require('jsonwebtoken');
 
 const grpc = require('grpc');
 
@@ -18,11 +19,17 @@ const typeDefs = gql`
   }
 `;
 
+function getAuthenticatedUserIdFromHeader(authorizationHeader) {
+  const match = authorizationHeader.match(/Bearer (.+)/);
+  if (!match) return undefined;
+  const token = match[1];
+  const payload = jwt.decode(token);
+  return payload.authenticatedUserId;
+}
+
 const resolvers = {
   Query: {
-    // TODO: CHange to starRatingsByRatableId
     starRatingsByRatableId: (_parent, _args, context) => {
-      // TODO: Figure out how to get an authenticated user id in here from the graphql service
       return new Promise((resolve, reject) => {
         return resolve([
           {
@@ -37,7 +44,12 @@ const resolvers = {
 
 const schema = makeExecutableSchema({ typeDefs, resolvers });
 
-const server = new ApolloServer({ schema });
+const server = new ApolloServer({
+  schema,
+  context: ({ req }) => ({
+    authenticatedUserId: getAuthenticatedUserIdFromHeader(req.headers.authorization)
+  })
+});
 
 const app = express();
 

@@ -42,11 +42,11 @@ spec:
     metadata:
       labels:
         app: auth
-        version: '10'
+        version: '11'
     spec:
       containers:
       - name: auth
-        image: jasonblanchard/multisvc-auth:10
+        image: jasonblanchard/multisvc-auth:11
         env:
           - name: 'PORT'
             value: '80'

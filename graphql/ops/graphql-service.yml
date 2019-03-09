@@ -36,11 +36,11 @@ spec:
     metadata:
       labels:
         app: graphql
-        version: '12'
+        version: '13'
     spec:
       containers:
       - name: graphql
-        image: jasonblanchard/multisvc-graphql:12
+        image: jasonblanchard/multisvc-graphql:13
         env:
           - name: 'PORT'
             value: '80'

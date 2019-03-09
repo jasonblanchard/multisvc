@@ -19,10 +19,9 @@ function getRemoveExecutableSchema(uri) {
   const http = new HttpLink({ uri, fetch });
   
   const link = setContext((request, previousContext) => {
-    console.log(request);
     return {
       headers: {
-        'Authorization': 'asdf',
+        'Authorization': previousContext.graphqlContext && previousContext.graphqlContext.authorizationHeader,
       }
     }
   }).concat(http);  
@@ -76,7 +75,12 @@ const interval = setInterval(() => {
       ]
     });
     
-    const server = new ApolloServer({ schema });
+    const server = new ApolloServer({
+      schema,
+      context: ({ req }) => ({
+        authorizationHeader: req.headers.authorization
+      })
+    });
     
     const app = express();
     
